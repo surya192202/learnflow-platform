@@ -1,32 +1,101 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
+const ASSIGNMENT_DATA = {
+  "full-stack-development": {
+    title: "E-Commerce Frontend Showcase",
+    objective: "Build a responsive landing page for an online store using React and Tailwind CSS.",
+    format: "GitHub Repository Link or .ZIP file containing source code",
+    description: "In this assignment, you will apply your knowledge of HTML, CSS, JavaScript, and React to construct a fully responsive frontend interface for an e-commerce website. The layout must include a hero section, a featured products grid, and a responsive navigation bar.",
+    duration: "Estimated: 4-6 Hours"
+  },
+  "data-science": {
+    title: "Exploratory Data Analysis (EDA) Report",
+    objective: "Analyze a provided CSV dataset using Pandas and Matplotlib.",
+    format: "Jupyter Notebook (.ipynb) or PDF Report",
+    description: "Use Pandas to clean a raw dataset containing housing prices. Handle missing values, filter outliers, and use Matplotlib or Seaborn to generate 3 distinct visualizations (e.g., histogram, scatter plot, correlation heatmap) explaining price trends.",
+    duration: "Estimated: 3-5 Hours"
+  },
+  "machine-learning": {
+    title: "Predictive Classification Model",
+    objective: "Train a Random Forest classifier using Scikit-Learn to predict customer churn.",
+    format: "Jupyter Notebook (.ipynb) or Python Script (.py)",
+    description: "You will be provided with a telecommunications dataset. Your task is to perform feature engineering, split the data into training/testing sets, train a classification model, and output a confusion matrix along with the model's accuracy, precision, and recall.",
+    duration: "Estimated: 5-8 Hours"
+  },
+  "python-programming": {
+    title: "Command-Line Task Manager",
+    objective: "Build a CLI application in Python to manage a To-Do list saved in a JSON file.",
+    format: "Python Source File (.py)",
+    description: "Create a Python script that accepts command-line arguments to 'add', 'view', 'complete', and 'delete' tasks. The tasks must persist between script executions by reading and writing to a local JSON file. Implement try/except blocks for file handling.",
+    duration: "Estimated: 2-4 Hours"
+  },
+  "web-development": {
+    title: "Portfolio Website",
+    objective: "Create a personal portfolio website with semantic HTML and CSS Grid/Flexbox.",
+    format: "Live URL (Netlify/Vercel) or .ZIP file",
+    description: "Design a multi-page static portfolio. It must include an 'About Me', 'Projects' grid (using CSS Grid), and a functional 'Contact' form representation. The design must be perfectly responsive on mobile devices.",
+    duration: "Estimated: 3-5 Hours"
+  },
+  "sql-databases": {
+    title: "Database Normalization & Querying",
+    objective: "Design a 3NF relational schema and write complex JOIN queries.",
+    format: "SQL Script (.sql) and ER Diagram (.png/pdf)",
+    description: "Given a flat denormalized spreadsheet of university enrollments, design a normalized schema (Students, Courses, Enrollments, Departments). Write the SQL CREATE TABLE statements and provide 3 queries: one using an INNER JOIN, one using a LEFT JOIN, and one using a GROUP BY with HAVING.",
+    duration: "Estimated: 4-6 Hours"
+  },
+  "react-development": {
+    title: "State Management Dashboard",
+    objective: "Build an interactive dashboard using React Context or Redux.",
+    format: "GitHub Repository Link",
+    description: "Create a metrics dashboard that fetches mock data from a free public API. Provide global state filtering controls (e.g., date range, category) that update multiple isolated chart/table components simultaneously without prop drilling.",
+    duration: "Estimated: 5-7 Hours"
+  },
+  "nodejs-backend": {
+    title: "RESTful User API",
+    objective: "Develop a secure CRUD API using Node.js, Express, and JWT.",
+    format: "GitHub Repository Link",
+    description: "Construct a Node.js API that allows users to register, login, and fetch a protected profile route. Passwords must be hashed with bcrypt. Output cleanly formatted JSON responses and use appropriate HTTP status codes.",
+    duration: "Estimated: 4-6 Hours"
+  }
+};
+
 async function seed() {
+  console.log('🚀 Connecting to Aiven MySQL for seeding...');
   const connection = await mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT || '3306', 10),
+    user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME || 'lms_db',
+    database: process.env.DB_NAME,
+    ssl: { rejectUnauthorized: false },
   });
 
   try {
-    console.log('Connected. Clearing old data...');
+    console.log('✅ Connected. Clearing old data...');
     await connection.execute('SET FOREIGN_KEY_CHECKS = 0');
     await connection.execute('TRUNCATE TABLE progress');
     await connection.execute('TRUNCATE TABLE videos');
     await connection.execute('TRUNCATE TABLE sections');
     await connection.execute('TRUNCATE TABLE subjects');
+    await connection.execute('TRUNCATE TABLE assignments');
+    await connection.execute('TRUNCATE TABLE practice_questions');
     await connection.execute('SET FOREIGN_KEY_CHECKS = 1');
 
     const subjects = [
-      { slug: 'full-stack-development', title: 'Full Stack Web Development', description: 'Master HTML, CSS, JavaScript, React, Node.js, Express, and MySQL to become a full stack developer.' },
-      { slug: 'data-science', title: 'Data Science with Python', description: 'Learn Python, NumPy, Pandas, Matplotlib, statistics, and machine learning fundamentals.' },
-      { slug: 'machine-learning', title: 'Machine Learning A-Z', description: 'From regression to neural networks — learn practical machine learning with scikit-learn.' },
-      { slug: 'python-programming', title: 'Python Programming Masterclass', description: 'Complete Python course covering basics, OOP, file handling, decorators, and real-world projects.' },
-      { slug: 'web-development', title: 'Modern Web Development', description: 'Build responsive websites with HTML, CSS, JavaScript, Tailwind CSS, and Next.js.' },
-      { slug: 'sql-databases', title: 'SQL & Database Engineering', description: 'Master SQL queries, database design, normalization, and explore NoSQL with MongoDB.' },
-      { slug: 'java-programming', title: 'Java Programming Complete', description: 'Learn Java from scratch — OOP, Spring Boot, data structures, and backend development.' },
-      { slug: 'artificial-intelligence', title: 'Artificial Intelligence & Deep Learning', description: 'AI fundamentals, deep learning, TensorFlow, NLP with transformers, and computer vision.' },
+      { slug: 'full-stack-development', title: 'Full Stack Web Development', instructor: 'freeCodeCamp', level: 'Beginner', thumbnail: 'https://images.unsplash.com/photo-1627398242149-179d1e1e23b4?auto=format&fit=crop&q=80&w=800', description: 'Master HTML, CSS, JavaScript, React, Node.js, Express, and MySQL to become a full stack developer.' },
+      { slug: 'data-science', title: 'Data Science with Python', instructor: 'freeCodeCamp', level: 'Beginner', thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800', description: 'Learn Python, NumPy, Pandas, Matplotlib, statistics, and machine learning fundamentals.' },
+      { slug: 'machine-learning', title: 'Machine Learning A-Z', instructor: 'Tech With Tim', level: 'Intermediate', thumbnail: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&q=80&w=800', description: 'From regression to neural networks — learn practical machine learning with scikit-learn.' },
+      { slug: 'python-programming', title: 'Python Programming Masterclass', instructor: 'Programming with Mosh', level: 'Beginner', thumbnail: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&q=80&w=800', description: 'Complete Python course covering basics, OOP, file handling, decorators, and real-world projects.' },
+      { slug: 'web-development', title: 'Modern Web Development', instructor: 'Traversy Media', level: 'Beginner', thumbnail: 'https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=800', description: 'Build responsive websites with HTML, CSS, JavaScript, Tailwind CSS, and Next.js.' },
+      { slug: 'sql-databases', title: 'SQL & Database Engineering', instructor: 'freeCodeCamp', level: 'Beginner', thumbnail: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&q=80&w=800', description: 'Master SQL queries, database design, normalization, and explore NoSQL with MongoDB.' },
+      { slug: 'java-programming', title: 'Java Programming Complete', instructor: 'Bro Code', level: 'Beginner', thumbnail: 'https://images.unsplash.com/photo-1515879218367-8466d910aede?auto=format&fit=crop&q=80&w=800', description: 'Learn Java from scratch — OOP, Spring Boot, data structures, and backend development.' },
+      { slug: 'artificial-intelligence', title: 'Artificial Intelligence & Deep Learning', instructor: 'Simplilearn', level: 'Advanced', thumbnail: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800', description: 'AI fundamentals, deep learning, TensorFlow, NLP with transformers, and computer vision.' },
+      { slug: 'react-development', title: 'React Professional Developer', instructor: 'Codevolution', level: 'Intermediate', thumbnail: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=800', description: 'Master React, hooks, state management, and Next.js.' },
+      { slug: 'nodejs-backend', title: 'Node.js Backend Architecture', instructor: 'Maximilian Schwarzmüller', level: 'Advanced', thumbnail: 'https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&q=80&w=800', description: 'Advanced backend development with Node.js, Express, microservices, and APIs.' },
+      { slug: 'cloud-computing', title: 'Cloud Computing with AWS', instructor: 'Stephane Maarek', level: 'Beginner', thumbnail: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800', description: 'Learn cloud infrastructure, deploying apps, serverless, and cloud databases.' },
+      { slug: 'devops-fundamentals', title: 'DevOps & CI/CD Masterclass', instructor: 'TechWorld with Nana', level: 'Intermediate', thumbnail: 'https://images.unsplash.com/photo-1618401479427-c8ef9465fbe1?auto=format&fit=crop&q=80&w=800', description: 'Docker, Kubernetes, Jenkins, GitHub Actions, and continuous integration.' },
+      { slug: 'cyber-security', title: 'Cyber Security & Ethical Hacking', instructor: 'NetworkChuck', level: 'Beginner', thumbnail: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800', description: 'Network security, penetration testing, cryptography, and securing applications.' },
     ];
 
     const courseData = {
@@ -129,16 +198,82 @@ async function seed() {
           { title: 'Computer Vision with OpenCV', youtubeUrl: 'https://www.youtube.com/embed/oXlwWbU8l2o', orderIndex: 3, duration: 3960 },
         ]},
       ],
+      'react-development': [
+        { title: 'React Fundamentals', orderIndex: 1, videos: [
+          { title: 'React JS Crash Course', youtubeUrl: 'https://www.youtube.com/embed/w7ejDZ8SWv8', orderIndex: 1, duration: 5400 },
+          { title: 'React Hooks Explained', youtubeUrl: 'https://www.youtube.com/embed/TNhaISOUy6Q', orderIndex: 2, duration: 2400 },
+        ]},
+        { title: 'Advanced React', orderIndex: 2, videos: [
+          { title: 'State Management with Redux', youtubeUrl: 'https://www.youtube.com/embed/9boMnm5X9ak', orderIndex: 1, duration: 3600 },
+        ]}
+      ],
+      'nodejs-backend': [
+        { title: 'Node.js Basics', orderIndex: 1, videos: [
+          { title: 'Node.js Complete Course', youtubeUrl: 'https://www.youtube.com/embed/Oe421EPjeBE', orderIndex: 1, duration: 7200 },
+        ]},
+        { title: 'API Development', orderIndex: 2, videos: [
+          { title: 'Build REST APIs', youtubeUrl: 'https://www.youtube.com/embed/pKd0Rpw7O48', orderIndex: 1, duration: 5400 },
+        ]}
+      ],
+      'cloud-computing': [
+        { title: 'AWS Cloud Intro', orderIndex: 1, videos: [
+          { title: 'AWS Certified Cloud Practitioner', youtubeUrl: 'https://www.youtube.com/embed/3hLmDS179YE', orderIndex: 1, duration: 14400 },
+        ]},
+        { title: 'Cloud Architecture', orderIndex: 2, videos: [
+          { title: 'AWS EC2, S3, & VPCs', youtubeUrl: 'https://www.youtube.com/embed/k1EYcjzgQi0', orderIndex: 1, duration: 7200 },
+        ]}
+      ],
+      'devops-fundamentals': [
+        { title: 'Containerization', orderIndex: 1, videos: [
+          { title: 'Docker Tutorial for Beginners', youtubeUrl: 'https://www.youtube.com/embed/pTFZFxd4hOI', orderIndex: 1, duration: 7200 },
+        ]},
+        { title: 'Orchestration & CI/CD', orderIndex: 2, videos: [
+          { title: 'Kubernetes Crash Course', youtubeUrl: 'https://www.youtube.com/embed/X48VuDVv0do', orderIndex: 1, duration: 9000 },
+        ]}
+      ],
+      'cyber-security': [
+        { title: 'Security Basics', orderIndex: 1, videos: [
+          { title: 'Cyber Security Full Course', youtubeUrl: 'https://www.youtube.com/embed/U_P23SqJaDc', orderIndex: 1, duration: 43200 },
+        ]},
+        { title: 'Penetration Testing', orderIndex: 2, videos: [
+          { title: 'Ethical Hacking Crash Course', youtubeUrl: 'https://www.youtube.com/embed/fNzpcB7ODxQ', orderIndex: 1, duration: 10800 },
+        ]}
+      ],
     };
 
     // Insert subjects
     for (const sub of subjects) {
       const [result] = await connection.execute(
-        'INSERT INTO subjects (title, slug, description, is_published) VALUES (?, ?, ?, TRUE)',
-        [sub.title, sub.slug, sub.description]
+        'INSERT INTO subjects (title, slug, description, thumbnail, level, instructor, is_published) VALUES (?, ?, ?, ?, ?, ?, TRUE)',
+        [sub.title, sub.slug, sub.description, sub.thumbnail, sub.level, sub.instructor]
       );
       const subjectId = result.insertId;
       console.log(`  ✓ Subject: ${sub.title} (id=${subjectId})`);
+
+      // Insert assignments
+      const assign = ASSIGNMENT_DATA[sub.slug];
+      if (assign) {
+        await connection.execute(
+          'INSERT INTO assignments (subject_id, title, description, objective, submission_format, duration_estimate) VALUES (?, ?, ?, ?, ?, ?)',
+          [subjectId, assign.title, assign.description, assign.objective, assign.format, assign.duration]
+        );
+        console.log(`    → Assignment seeded`);
+      }
+
+      // Insert mock practice questions (3 per subject)
+      const questions = [
+        { q: `What is the primary goal of ${sub.title}?`, a: 'To build skills', b: 'To waste time', c: 'To sleep', d: 'To eat', correct: 'a' },
+        { q: `Which instructor teaches ${sub.title}?`, a: 'Unknown', b: sub.instructor, c: 'AI', d: 'Nobody', correct: 'b' },
+        { q: `Is ${sub.title} a ${sub.level} level course?`, a: 'Yes', b: 'No', c: 'Maybe', d: 'I don\'t know', correct: 'a' },
+      ];
+
+      for (const q of questions) {
+        await connection.execute(
+          'INSERT INTO practice_questions (subject_id, question, option_a, option_b, option_c, option_d, correct_answer) VALUES (?, ?, ?, ?, ?, ?, ?)',
+          [subjectId, q.q, q.a, q.b, q.c, q.d, q.correct]
+        );
+      }
+      console.log(`    → 3 practice questions seeded`);
 
       const sectionsList = courseData[sub.slug];
       if (!sectionsList) continue;
@@ -159,7 +294,7 @@ async function seed() {
       }
     }
 
-    console.log('\n✅ Database seeded successfully with 8 courses!');
+    console.log('\n✅ Database seeded successfully with Aiven MySQL!');
   } catch (err) {
     console.error('Seed error:', err);
   } finally {

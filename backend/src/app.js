@@ -10,6 +10,7 @@ const authRoutes = require('./modules/auth/routes');
 const subjectsRoutes = require('./modules/subjects/routes');
 const videosRoutes = require('./modules/videos/routes');
 const progressRoutes = require('./modules/progress/routes');
+const aiRoutes = require('./modules/ai/routes');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/subjects', subjectsRoutes);
 app.use('/api/videos', videosRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Error Handler (must be last middleware)
 app.use(errorHandler);

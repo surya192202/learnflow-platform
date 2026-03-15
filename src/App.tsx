@@ -13,6 +13,7 @@ import Learning from "./pages/Learning.tsx";
 import Profile from "./pages/Profile.tsx";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
+import Assignment from "./pages/Assignment.tsx"; // Added Assignment import
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/subject/:id" element={<SubjectDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/assignment" element={<Assignment />} /> {/* Added Assignment route */}
             
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>

@@ -139,13 +139,30 @@ exports.logout = async (req, res, next) => {
 exports.me = async (req, res, next) => {
   try {
     const [users] = await pool.query(
-      'SELECT id, name, email, created_at FROM users WHERE id = ?',
+      'SELECT id, name, email, created_at, age, phone_number, gender, experience_status, years_of_experience FROM users WHERE id = ?',
       [req.user.id]
     );
     if (users.length === 0) {
       return res.status(404).json({ error: { message: 'User not found' } });
     }
     res.json({ user: users[0] });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateProfile = async (req, res, next) => {
+  try {
+    const { name, age, phone_number, gender, experience_status, years_of_experience } = req.body;
+    
+    await pool.query(
+      `UPDATE users 
+       SET name = COALESCE(?, name), age = ?, phone_number = ?, gender = ?, experience_status = ?, years_of_experience = ?
+       WHERE id = ?`,
+      [name, age || null, phone_number || null, gender || null, experience_status || null, years_of_experience || null, req.user.id]
+    );
+
+    res.json({ message: 'Profile updated successfully' });
   } catch (error) {
     next(error);
   }

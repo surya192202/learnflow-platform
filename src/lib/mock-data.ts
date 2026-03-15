@@ -221,6 +221,98 @@ const aiSections: Section[] = [
   },
 ];
 
+// ─── React Development ─────────────────────────────────────────
+const reactSections: Section[] = [
+  {
+    id: "react-s1",
+    title: "React Fundamentals",
+    lessons: [
+      { id: "r-l1", title: "React JS Crash Course", duration: "90:00", completed: false, locked: false, videoUrl: "https://www.youtube.com/embed/w7ejDZ8SWv8", description: "Learn React concepts — JSX, Props, State." },
+      { id: "r-l2", title: "React Hooks Explained", duration: "40:00", completed: false, locked: true, videoUrl: "https://www.youtube.com/embed/TNhaISOUy6Q", description: "Master useState, useEffect, and custom hooks." },
+    ],
+  },
+  {
+    id: "react-s2",
+    title: "Advanced React",
+    lessons: [
+      { id: "r-l3", title: "State Management with Redux", duration: "60:00", completed: false, locked: true, videoUrl: "https://www.youtube.com/embed/9boMnm5X9ak", description: "Global state management for complex applications." },
+    ],
+  },
+];
+
+// ─── Node.js Backend ───────────────────────────────────────────
+const nodejsSections: Section[] = [
+  {
+    id: "node-s1",
+    title: "Node.js Basics",
+    lessons: [
+      { id: "n-l1", title: "Node.js Complete Course", duration: "120:00", completed: false, locked: false, videoUrl: "https://www.youtube.com/embed/Oe421EPjeBE", description: "Server-side routing, Event Loop, File Systems." },
+    ],
+  },
+  {
+    id: "node-s2",
+    title: "API Development",
+    lessons: [
+      { id: "n-l2", title: "Build REST APIs", duration: "90:00", completed: false, locked: true, videoUrl: "https://www.youtube.com/embed/pKd0Rpw7O48", description: "Design scalable REST architecture with Express." },
+    ],
+  },
+];
+
+// ─── Cloud Computing ───────────────────────────────────────────
+const cloudSections: Section[] = [
+  {
+    id: "cloud-s1",
+    title: "AWS Cloud Intro",
+    lessons: [
+      { id: "c-l1", title: "AWS Certified Cloud Practitioner", duration: "240:00", completed: false, locked: false, videoUrl: "https://www.youtube.com/embed/3hLmDS179YE", description: "Foundations of cloud computing and AWS Global Infrastructure." },
+    ],
+  },
+  {
+    id: "cloud-s2",
+    title: "Cloud Architecture",
+    lessons: [
+      { id: "c-l2", title: "AWS EC2, S3, & VPCs", duration: "120:00", completed: false, locked: true, videoUrl: "https://www.youtube.com/embed/k1EYcjzgQi0", description: "Compute, storage, and networking essentials." },
+    ],
+  },
+];
+
+// ─── DevOps Fundamentals ───────────────────────────────────────
+const devopsSections: Section[] = [
+  {
+    id: "devops-s1",
+    title: "Containerization",
+    lessons: [
+      { id: "d-l1", title: "Docker Tutorial for Beginners", duration: "120:00", completed: false, locked: false, videoUrl: "https://www.youtube.com/embed/pTFZFxd4hOI", description: "Images, containers, Dockerfiles, and Docker Compose." },
+    ],
+  },
+  {
+    id: "devops-s2",
+    title: "Orchestration & CI/CD",
+    lessons: [
+      { id: "d-l2", title: "Kubernetes Crash Course", duration: "150:00", completed: false, locked: true, videoUrl: "https://www.youtube.com/embed/X48VuDVv0do", description: "Deploying, scaling, and managing containerized applications." },
+    ],
+  },
+];
+
+// ─── Cyber Security ────────────────────────────────────────────
+const cyberSections: Section[] = [
+  {
+    id: "cyber-s1",
+    title: "Security Basics",
+    lessons: [
+      { id: "cy-l1", title: "Cyber Security Full Course", duration: "720:00", completed: false, locked: false, videoUrl: "https://www.youtube.com/embed/U_P23SqJaDc", description: "Foundations of networking, security protocols, and firewalls." },
+    ],
+  },
+  {
+    id: "cyber-s2",
+    title: "Penetration Testing",
+    lessons: [
+      { id: "cy-l2", title: "Ethical Hacking Crash Course", duration: "180:00", completed: false, locked: true, videoUrl: "https://www.youtube.com/embed/fNzpcB7ODxQ", description: "Scanning, payload crafting, and identifying system vulnerabilities." },
+    ],
+  },
+];
+
+
 // ── Helper to count lessons and compute total duration ──
 function computeMeta(sections: Section[]) {
   const allLessons = sections.flatMap((s) => s.lessons);
@@ -241,6 +333,11 @@ const wdMeta = computeMeta(webDevSections);
 const sqlMeta = computeMeta(sqlSections);
 const javaMeta = computeMeta(javaSections);
 const aiMeta = computeMeta(aiSections);
+const reactMeta = computeMeta(reactSections);
+const nodejsMeta = computeMeta(nodejsSections);
+const cloudMeta = computeMeta(cloudSections);
+const devopsMeta = computeMeta(devopsSections);
+const cyberMeta = computeMeta(cyberSections);
 
 export const SUBJECTS: Subject[] = [
   {
@@ -363,16 +460,96 @@ export const SUBJECTS: Subject[] = [
     level: "Advanced",
     sections: aiSections,
   },
+  {
+    id: "react-development",
+    title: "React Professional Developer",
+    instructor: "Codevolution",
+    instructorAvatar: "CV",
+    description: "Master React, hooks, state management, and Next.js.",
+    longDescription: "A fully comprehensive path from basic components to advanced state management. Learn exactly how real-world React applications are built with Hooks, Redux/Zustand, routing, and Next.js framework.",
+    progress: 0,
+    lessons: reactMeta.lessons,
+    duration: reactMeta.duration,
+    thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=800",
+    category: "React Development",
+    level: "Intermediate",
+    sections: reactSections,
+  },
+  {
+    id: "nodejs-backend",
+    title: "Node.js Backend Architecture",
+    instructor: "Maximilian Schwarzmüller",
+    instructorAvatar: "MS",
+    description: "Advanced backend development with Node.js, Express, microservices, and APIs.",
+    longDescription: "Build highly scalable, robust backends. You will cover RESTful API principles, JWT authentication, deployment, security, event loops, and microservices logic with Node.js and Express.",
+    progress: 0,
+    lessons: nodejsMeta.lessons,
+    duration: nodejsMeta.duration,
+    thumbnail: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&q=80&w=800",
+    category: "Node.js Backend",
+    level: "Advanced",
+    sections: nodejsSections,
+  },
+  {
+    id: "cloud-computing",
+    title: "Cloud Computing with AWS",
+    instructor: "Stephane Maarek",
+    instructorAvatar: "SM",
+    description: "Learn cloud infrastructure, deploying apps, serverless, and cloud databases.",
+    longDescription: "Go from cloud novice to deploying sophisticated architectures on AWS. Learn core services like EC2, S3, RDS, IAM, Lambda, and understand highly available fault-tolerant infrastructure.",
+    progress: 0,
+    lessons: cloudMeta.lessons,
+    duration: cloudMeta.duration,
+    thumbnail: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
+    category: "Cloud Computing",
+    level: "Beginner",
+    sections: cloudSections,
+  },
+  {
+    id: "devops-fundamentals",
+    title: "DevOps & CI/CD Masterclass",
+    instructor: "TechWorld with Nana",
+    instructorAvatar: "TN",
+    description: "Docker, Kubernetes, Jenkins, GitHub Actions, and continuous integration.",
+    longDescription: "Automate everything! Learn the tools requested by modern tech companies to streamline deployments. Practice building Docker containers, writing CI/CD pipelines, and orchestrating with Kubernetes.",
+    progress: 0,
+    lessons: devopsMeta.lessons,
+    duration: devopsMeta.duration,
+    thumbnail: "https://images.unsplash.com/photo-1618401479427-c8ef9465fbe1?auto=format&fit=crop&q=80&w=800",
+    category: "DevOps Fundamentals",
+    level: "Intermediate",
+    sections: devopsSections,
+  },
+  {
+    id: "cyber-security",
+    title: "Cyber Security & Ethical Hacking",
+    instructor: "NetworkChuck",
+    instructorAvatar: "NC",
+    description: "Network security, penetration testing, cryptography, and securing applications.",
+    longDescription: "Think like a hacker to defend your systems. You'll learn Linux basics, network scanning, vulnerability assessment, payload exploitation, and how to defend enterprise applications against top OWASP vulnerabilities.",
+    progress: 0,
+    lessons: cyberMeta.lessons,
+    duration: cyberMeta.duration,
+    thumbnail: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800",
+    category: "Cyber Security",
+    level: "Beginner",
+    sections: cyberSections,
+  },
 ];
 
 export const CATEGORIES = [
   "All",
   "Full Stack Development",
+  "React Development",
+  "Node.js Backend",
+  "Web Development",
   "Data Science",
   "Machine Learning",
   "Artificial Intelligence",
   "Python Programming",
   "Java Programming",
-  "Web Development",
   "SQL & Databases",
+  "Cloud Computing",
+  "DevOps Fundamentals",
+  "Cyber Security",
 ];

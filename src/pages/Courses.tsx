@@ -34,20 +34,39 @@ const Courses = () => {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-2 mb-8">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 ${
-                activeCategory === cat
-                  ? "bg-foreground text-background"
-                  : "bg-secondary text-muted-foreground hover:text-foreground"
+        <div className="flex items-center gap-3 mb-8">
+          <button
+            onClick={() => setActiveCategory("All")}
+            className={`px-5 py-2.5 text-sm font-semibold rounded-xl transition-all duration-200 ${
+              activeCategory === "All"
+                ? "bg-foreground text-background shadow-sm"
+                : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80"
+            }`}
+          >
+            All Courses
+          </button>
+          
+          <div className="relative">
+            <select
+              value={activeCategory}
+              onChange={(e) => setActiveCategory(e.target.value)}
+              className={`appearance-none px-5 py-2.5 pr-10 text-sm font-semibold rounded-xl outline-none transition-all duration-200 cursor-pointer border border-transparent focus:ring-2 focus:ring-primary/20 ${
+                activeCategory !== "All"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80"
               }`}
             >
-              {cat}
-            </button>
-          ))}
+              <option value="All" disabled className="hidden">Filter by Category</option>
+              {CATEGORIES.filter(c => c !== "All").map((cat) => (
+                <option key={cat} value={cat} className="bg-background text-foreground font-medium py-2">
+                  {cat}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+              <svg className={`w-4 h-4 ${activeCategory !== "All" ? "text-primary-foreground" : "text-muted-foreground"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+          </div>
         </div>
 
         {/* Grid */}

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Search, User, LogIn, LogOut } from "lucide-react";
+import { Search, User, LogIn, LogOut, GraduationCap } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 
@@ -12,15 +12,16 @@ const Navbar = () => {
     { label: "Home", path: "/" },
     { label: "Courses", path: "/courses" },
     { label: "Practice", path: "/practice" },
+    { label: "Assignment", path: "/assignment" },
   ];
 
   return (
     <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-lg border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 shrink-0">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-sm font-bold text-primary-foreground">LF</span>
+        <Link to="/" className="flex items-center gap-2.5 shrink-0">
+          <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center">
+            <GraduationCap className="w-5 h-5 text-primary-foreground" />
           </div>
           <span className="text-lg font-bold tracking-tight text-foreground hidden sm:block">
             LearnFlow
@@ -35,7 +36,7 @@ const Navbar = () => {
               to={link.path}
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                 location.pathname === link.path
-                  ? "text-foreground bg-secondary"
+                  ? "text-primary bg-accent"
                   : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
               }`}
             >
@@ -64,7 +65,7 @@ const Navbar = () => {
                 to="/profile"
                 className={`inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                   location.pathname === "/profile"
-                    ? "text-foreground bg-secondary"
+                    ? "text-primary bg-accent"
                     : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                 }`}
               >
@@ -82,7 +83,7 @@ const Navbar = () => {
           ) : (
             <Link
               to="/login"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-foreground text-background text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
             >
               <LogIn className="w-4 h-4" />
               <span className="hidden sm:inline">Login</span>
@@ -104,7 +105,7 @@ const Navbar = () => {
             to={link.path}
             className={`px-3 py-1.5 text-sm font-medium rounded-lg whitespace-nowrap transition-colors ${
               location.pathname === link.path
-                ? "text-foreground bg-secondary"
+                ? "text-primary bg-accent"
                 : "text-muted-foreground"
             }`}
           >
