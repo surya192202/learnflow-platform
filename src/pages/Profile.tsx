@@ -2,10 +2,18 @@ import { motion } from "framer-motion";
 import { BookOpen, Clock, Trophy } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import ProfileCard from "@/components/shared/ProfileCard";
-import { SUBJECTS, CURRENT_USER } from "@/lib/mock-data";
+import { SUBJECTS } from "@/lib/mock-data";
+import { useAuth } from "@/context/AuthContext";
 
 const Profile = () => {
-  const enrolled = SUBJECTS.filter((s) => CURRENT_USER.enrolledSubjects.includes(s.id));
+  const { user } = useAuth();
+  
+  const userInitials = user?.name
+    ? user.name.split(" ").map(n => n[0]).join("").toUpperCase()
+    : "U";
+
+  // For now, subjects are still from mock data (will be replaced when subjects API is connected)
+  const enrolled = SUBJECTS.slice(0, 3);
   const totalProgress = enrolled.length
     ? Math.round(enrolled.reduce((acc, s) => acc + s.progress, 0) / enrolled.length)
     : 0;
@@ -13,7 +21,7 @@ const Profile = () => {
   const stats = [
     { label: "Enrolled Courses", value: enrolled.length, icon: BookOpen },
     { label: "Avg. Progress", value: `${totalProgress}%`, icon: Trophy },
-    { label: "Total Hours", value: "40h+", icon: Clock },
+    { label: "Total Hours", value: "0h", icon: Clock },
   ];
 
   return (
@@ -29,11 +37,11 @@ const Profile = () => {
           className="flex items-center gap-5 mb-10"
         >
           <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center text-xl font-bold text-primary-foreground shrink-0">
-            {CURRENT_USER.avatar}
+            {userInitials}
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">{CURRENT_USER.name}</h1>
-            <p className="text-sm text-muted-foreground">{CURRENT_USER.email}</p>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">{user?.name || "User"}</h1>
+            <p className="text-sm text-muted-foreground">{user?.email || ""}</p>
           </div>
         </motion.div>
 
@@ -64,19 +72,18 @@ const Profile = () => {
           </div>
         </section>
 
-        {/* Recent Activity */}
+        {/* Info */}
         <section>
-          <h2 className="text-lg font-semibold text-foreground mb-4">Recent Activity</h2>
-          <div className="bg-card rounded-2xl shadow-card divide-y divide-border">
-            {CURRENT_USER.recentLessons.map((item) => (
-              <div key={item.lessonId} className="flex items-center justify-between px-5 py-4">
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate">{item.title}</p>
-                  <p className="text-xs text-muted-foreground">{item.subjectTitle}</p>
-                </div>
-                <span className="text-xs text-muted-foreground shrink-0 ml-4">{item.date}</span>
-              </div>
-            ))}
+          <h2 className="text-lg font-semibold text-foreground mb-4">Account Info</h2>
+          <div className="bg-card rounded-2xl shadow-card p-5 space-y-3">
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Name</span>
+              <span className="text-foreground font-medium">{user?.name}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Email</span>
+              <span className="text-foreground font-medium">{user?.email}</span>
+            </div>
           </div>
         </section>
       </main>
