@@ -92,6 +92,12 @@ const SubjectDetail = () => {
                 src={mockSubject.thumbnail}
                 alt={mockSubject.title}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  if (target.dataset.fallback === "true") return;
+                  target.dataset.fallback = "true";
+                  target.src = "/placeholder.svg";
+                }}
               />
             </div>
 

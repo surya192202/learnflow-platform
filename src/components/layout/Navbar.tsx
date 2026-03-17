@@ -81,13 +81,22 @@ const Navbar = () => {
               </button>
             </>
           ) : (
-            <Link
-              to="/login"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
-            >
-              <LogIn className="w-4 h-4" />
-              <span className="hidden sm:inline">Login</span>
-            </Link>
+            <>
+              <Link
+                to="/login"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
+              >
+                <LogIn className="w-4 h-4" />
+                <span className="hidden sm:inline">Login</span>
+              </Link>
+              <Link
+                to="/register"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-secondary text-foreground text-sm font-medium rounded-xl hover:bg-secondary/80 transition-colors"
+              >
+                <User className="w-4 h-4" />
+                <span className="hidden sm:inline">Register</span>
+              </Link>
+            </>
           )}
 
           {/* Mobile search */}

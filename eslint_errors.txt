@@ -1,0 +1,66 @@
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\components\shared\AuthForm.tsx
+  63:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\components\ui\badge.tsx
+  29:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\components\ui\button.tsx
+  47:18  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\components\ui\command.tsx
+  24:11  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\components\ui\form.tsx
+  129:10  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\components\ui\navigation-menu.tsx
+  111:3  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\components\ui\sidebar.tsx
+  636:3  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\components\ui\sonner.tsx
+  27:19  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\components\ui\textarea.tsx
+  5:18  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\components\ui\toggle.tsx
+  37:18  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\context\AuthContext.tsx
+   81:17  error    Empty block statement                                                                                                           no-empty
+  101:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\lib\api.ts
+  19:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\pages\Assignment.tsx
+  110:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  120:21  error  Empty block statement                     no-empty
+  138:67  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\pages\Learning.tsx
+   72:17  error    Unexpected any. Specify a different type                                                                            @typescript-eslint/no-explicit-any
+   77:6   warning  React Hook useCallback has a missing dependency: 'activeVideoId'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  147:17  error    Unexpected any. Specify a different type                                                                            @typescript-eslint/no-explicit-any
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\pages\Practice.tsx
+  126:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  138:19  error  Empty block statement                     no-empty
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\pages\Profile.tsx
+  24:66  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Lenovo\Desktop\learnflow-platform\src\pages\SubjectDetail.tsx
+   26:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   53:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   57:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   61:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  164:78  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  166:68  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  184:46  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 29 problems (20 errors, 9 warnings)
+

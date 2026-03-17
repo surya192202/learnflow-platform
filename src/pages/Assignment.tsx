@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { FileText, Lock, Upload, CheckCircle2, Search, Clock, FileType, BookOpen } from "lucide-react";
@@ -73,6 +73,7 @@ const Assignment = () => {
   const { isAuthenticated, user, loading: authLoading } = useAuth();
   const [activeSubjectId, setActiveSubjectId] = useState<string>(SUBJECTS[0].id);
   const [searchQuery, setSearchQuery] = useState("");
+  const [enrolledCourses, setEnrolledCourses] = useState<Set<string>>(new Set());
   
   // Enrollment query - fetch all subjects to see if user has progress for the selected subject
   const { data: progressData } = useQuery({
@@ -88,6 +89,47 @@ const Assignment = () => {
     enabled: isAuthenticated && !!activeSubjectId,
   });
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setEnrolledCourses(new Set());
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const loadEnrollment = async () => {
+      try {
+        const subjectRes = await fetch("http://localhost:3000/api/subjects", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const subjects = await subjectRes.json();
+        const enrolled = new Set<string>();
+
+        await Promise.all(
+          subjects.map(async (sub: any) => {
+            try {
+              const res = await fetch(`http://localhost:3000/api/progress/subjects/${sub.id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+              });
+              const progress = await res.json();
+              if (Array.isArray(progress) && progress.length > 0) {
+                const mockSub = SUBJECTS.find((s) => s.title === sub.title);
+                if (mockSub) enrolled.add(mockSub.id);
+              }
+            } catch {}
+          })
+        );
+
+        setEnrolledCourses(enrolled);
+      } catch {
+        setEnrolledCourses(new Set());
+      }
+    };
+
+    loadEnrollment();
+  }, [isAuthenticated]);
+
   const subject = SUBJECTS.find(s => s.id === activeSubjectId) || SUBJECTS[0];
   const assignment = ASSIGNMENT_DATA[activeSubjectId];
   
@@ -96,8 +138,8 @@ const Assignment = () => {
   const completedLessons = progressData ? progressData.filter((p: any) => p.is_completed).length : 0;
   const progressPercent = totalLessons === 0 ? 0 : Math.round((completedLessons / totalLessons) * 100);
   
-  // User must be enrolled (progressData exists/array) AND completed 100% to upload
-  const isEnrolled = !!progressData && Array.isArray(progressData);
+  // User must be enrolled AND completed 100% to upload
+  const isEnrolled = enrolledCourses.has(activeSubjectId);
   const isCompleted = isEnrolled && progressPercent === 100;
 
   const filteredSubjects = useMemo(() => {
@@ -155,22 +197,39 @@ const Assignment = () => {
 
           <div className="bg-card rounded-2xl border border-border/50 overflow-hidden flex flex-col max-h-[600px]">
             <div className="overflow-y-auto p-2 space-y-1">
-              {filteredSubjects.map((s) => (
+              {filteredSubjects.map((s) => {
+                const enrolled = enrolledCourses.has(s.id);
+                const isActive = activeSubjectId === s.id;
+                return (
                 <button
                   key={s.id}
                   onClick={() => setActiveSubjectId(s.id)}
-                  className={`w-full text-left px-4 py-3 rounded-xl transition-all ${
-                    activeSubjectId === s.id
+                  className={`w-full text-left px-4 py-3 rounded-xl transition-all flex items-start gap-3 ${
+                    isActive
                       ? "bg-primary text-primary-foreground shadow-sm"
                       : "hover:bg-secondary text-foreground"
                   }`}
                 >
-                  <p className="font-semibold text-sm truncate">{s.title}</p>
-                  <p className={`text-xs mt-1 truncate ${activeSubjectId === s.id ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                    {ASSIGNMENT_DATA[s.id]?.title || "Capstone Project"}
-                  </p>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                    enrolled ? "bg-emerald-100" : "bg-secondary"
+                  }`}>
+                    {enrolled ? (
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    ) : (
+                      <Lock className="w-4 h-4 text-muted-foreground" />
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-sm truncate">{s.title}</p>
+                    <p className={`text-xs mt-1 truncate ${
+                      isActive ? "text-primary-foreground/80" : "text-muted-foreground"
+                    }`}>
+                      {ASSIGNMENT_DATA[s.id]?.title || "Capstone Project"}
+                    </p>
+                  </div>
                 </button>
-              ))}
+              );
+            })}
               {filteredSubjects.length === 0 && (
                 <div className="p-4 text-center text-sm text-muted-foreground">
                   No assignments found.
@@ -191,7 +250,23 @@ const Assignment = () => {
               transition={{ duration: 0.3 }}
               className="bg-card rounded-3xl border border-border/50 shadow-sm overflow-hidden min-h-[600px] flex flex-col"
             >
-              {!assignment ? (
+              {!isEnrolled ? (
+                <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
+                  <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center mb-6">
+                    <Lock className="w-8 h-8 text-muted-foreground" />
+                  </div>
+                  <h2 className="text-xl font-bold text-foreground mb-2">Assignments Locked</h2>
+                  <p className="text-muted-foreground max-w-sm mb-6">
+                    Enroll in this course to unlock assignment
+                  </p>
+                  <Link
+                    to={`/course/${subject.id}`}
+                    className="inline-flex px-4 py-2 bg-foreground text-background text-sm font-semibold rounded-lg hover:opacity-90"
+                  >
+                    Go to Course
+                  </Link>
+                </div>
+              ) : !assignment ? (
                 <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
                   <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center mb-6">
                     <FileText className="w-8 h-8 text-muted-foreground" />

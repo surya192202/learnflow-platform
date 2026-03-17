@@ -13,6 +13,12 @@ const ProfileCard = ({ subject }: ProfileCardProps) => (
       alt={subject.title}
       className="w-24 h-16 sm:w-32 sm:h-20 object-cover rounded-xl shrink-0"
       loading="lazy"
+      onError={(e) => {
+        const target = e.currentTarget;
+        if (target.dataset.fallback === "true") return;
+        target.dataset.fallback = "true";
+        target.src = "/placeholder.svg";
+      }}
     />
     <div className="flex-1 min-w-0">
       <h4 className="text-sm font-semibold text-foreground truncate">{subject.title}</h4>

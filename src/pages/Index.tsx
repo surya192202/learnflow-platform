@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, BookOpen, Users, Trophy, Zap, Code, Database, Brain, Cloud, Shield, Layout, Server, Activity, Bot, Send, User } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
+import { useAuth } from "@/context/AuthContext";
 
 const Index = () => {
   const [chatMessages, setChatMessages] = useState<{role: 'ai'|'user', text: string}[]>([
@@ -11,6 +12,7 @@ const Index = () => {
   const [chatInput, setChatInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { isAuthenticated } = useAuth();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -83,12 +85,21 @@ const Index = () => {
                 Browse Courses
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <Link
-                to="/register"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-secondary text-foreground text-base font-semibold rounded-2xl hover:bg-secondary/80 transition-colors"
-              >
-                Get Started Free
-              </Link>
+              {isAuthenticated ? (
+                <Link
+                  to="/profile"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-secondary text-foreground text-base font-semibold rounded-2xl hover:bg-secondary/80 transition-colors"
+                >
+                  Continue Learning
+                </Link>
+              ) : (
+                <Link
+                  to="/register"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-secondary text-foreground text-base font-semibold rounded-2xl hover:bg-secondary/80 transition-colors"
+                >
+                  Get Started Free
+                </Link>
+              )}
             </div>
           </motion.div>
 

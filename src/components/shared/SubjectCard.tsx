@@ -51,12 +51,9 @@ const SubjectCard = ({ subject }: SubjectCardProps) => {
           loading="lazy"
           onError={(e) => {
             const target = e.currentTarget;
-            target.onerror = null;
-            target.style.display = 'none';
-            const parent = target.parentElement;
-            if (parent) {
-              parent.style.background = 'linear-gradient(135deg, hsl(252 85% 60% / 0.15), hsl(252 85% 60% / 0.05))';
-            }
+            if (target.dataset.fallback === "true") return;
+            target.dataset.fallback = "true";
+            target.src = "/placeholder.svg";
           }}
         />
         <div className="absolute top-2 left-2 flex gap-2">
