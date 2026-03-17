@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { API_BASE } from "@/lib/api";
 
 interface User {
   id: number;
@@ -41,8 +42,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
         
         // Fetch fresh user data including new profile fields
-        const res = await fetch("http://localhost:3000/api/auth/me", {
-          headers: { Authorization: `Bearer ${token}` }
+        const res = await fetch(`${API_BASE}/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+          credentials: "include",
         });
         
         if (!res.ok) throw new Error("Failed to fetch user");
@@ -75,8 +77,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      await fetch("http://localhost:3000/api/auth/logout", {
+      await fetch(`${API_BASE}/auth/logout`, {
         method: "POST",
+        credentials: "include",
       });
     } catch (e) {}
     localStorage.removeItem("token");

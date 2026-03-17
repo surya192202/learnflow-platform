@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import { useAuth } from "@/context/AuthContext";
 import { SUBJECTS } from "@/lib/mock-data";
 import { Link } from "react-router-dom";
+import { API_BASE } from "@/lib/api";
 
 // Practice questions per course
 const PRACTICE_QUESTIONS: Record<string, { question: string; options: string[]; answer: number }[]> = {
@@ -119,7 +120,7 @@ const Practice = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    fetch("http://localhost:3000/api/subjects", {
+    fetch(`${API_BASE}/subjects`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => r.json())
@@ -127,7 +128,7 @@ const Practice = () => {
         const enrolled = new Set<string>();
         const promises = subjects.map(async (sub) => {
           try {
-            const res = await fetch(`http://localhost:3000/api/progress/subjects/${sub.id}`, {
+            const res = await fetch(`${API_BASE}/progress/subjects/${sub.id}`, {
               headers: { Authorization: `Bearer ${token}` },
             });
             const progress = await res.json();

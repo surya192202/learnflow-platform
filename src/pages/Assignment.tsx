@@ -6,7 +6,7 @@ import Navbar from "@/components/layout/Navbar";
 import { useAuth } from "@/context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { SUBJECTS } from "@/lib/mock-data";
-import { fetchSubjectsList } from "@/lib/api";
+import { API_BASE } from "@/lib/api";
 
 // Map of custom assignment data per subject
 const ASSIGNMENT_DATA: Record<string, { title: string; objective: string; format: string; description: string; duration: string }> = {
@@ -80,7 +80,7 @@ const Assignment = () => {
     queryKey: ['subject-progress-list', activeSubjectId],
     queryFn: async () => {
       if (!isAuthenticated) return null;
-      const res = await fetch(`http://localhost:3000/api/progress/subjects/${activeSubjectId}`, {
+      const res = await fetch(`${API_BASE}/progress/subjects/${activeSubjectId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}`, "Content-Type": "application/json" }
       });
       if (!res.ok) return null;
@@ -100,7 +100,7 @@ const Assignment = () => {
 
     const loadEnrollment = async () => {
       try {
-        const subjectRes = await fetch("http://localhost:3000/api/subjects", {
+        const subjectRes = await fetch(`${API_BASE}/subjects`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const subjects = await subjectRes.json();
@@ -109,7 +109,7 @@ const Assignment = () => {
         await Promise.all(
           subjects.map(async (sub: any) => {
             try {
-              const res = await fetch(`http://localhost:3000/api/progress/subjects/${sub.id}`, {
+              const res = await fetch(`${API_BASE}/progress/subjects/${sub.id}`, {
                 headers: { Authorization: `Bearer ${token}` },
               });
               const progress = await res.json();

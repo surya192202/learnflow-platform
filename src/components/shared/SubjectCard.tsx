@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Clock, BookOpen } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/context/AuthContext";
+import { API_BASE } from "@/lib/api";
 import type { Subject } from "@/lib/mock-data";
 
 interface SubjectCardProps {
@@ -23,7 +24,7 @@ const SubjectCard = ({ subject }: SubjectCardProps) => {
   const { data: progressList } = useQuery({
     queryKey: ["progress", subject.id],
     queryFn: async () => {
-      const res = await fetch(`http://localhost:3000/api/progress/subjects/${subject.id}`, {
+      const res = await fetch(`${API_BASE}/progress/subjects/${subject.id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!res.ok) return [];

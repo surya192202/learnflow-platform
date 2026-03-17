@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { GraduationCap, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
+import { API_BASE } from "@/lib/api";
 
 interface AuthFormProps {
   mode: "login" | "register";
@@ -39,12 +40,13 @@ const AuthForm = ({ mode }: AuthFormProps) => {
     setLoading(true);
 
     try {
-      const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
+      const endpoint = isLogin ? "/auth/login" : "/auth/register";
       const body = isLogin ? { email, password } : { name, email, password };
       
-      const response = await fetch(`http://localhost:3000${endpoint}`, {
+      const response = await fetch(`${API_BASE}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(body)
       });
 

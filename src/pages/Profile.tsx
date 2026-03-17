@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import ProfileCard from "@/components/shared/ProfileCard";
 import { SUBJECTS } from "@/lib/mock-data";
 import { useAuth } from "@/context/AuthContext";
+import { API_BASE } from "@/lib/api";
 
 const Profile = () => {
   const { user, updateUser } = useAuth();
@@ -47,14 +48,14 @@ const Profile = () => {
       }
 
       try {
-        const res = await fetch("http://localhost:3000/api/subjects", {
+        const res = await fetch(`${API_BASE}/subjects`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const allSubjects = await res.json();
         
         const coursesWithProgress = [];
         for (const sub of allSubjects) {
-          const pRes = await fetch(`http://localhost:3000/api/progress/subjects/${sub.id}`, {
+          const pRes = await fetch(`${API_BASE}/progress/subjects/${sub.id}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           const progressList = await pRes.json();
@@ -93,12 +94,13 @@ const Profile = () => {
           : null,
       };
 
-      const res = await fetch("http://localhost:3000/api/auth/profile", {
+      const res = await fetch(`${API_BASE}/auth/profile`, {
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
         },
+        credentials: "include",
         body: JSON.stringify(payload)
       });
 

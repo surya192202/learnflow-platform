@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, BookOpen, Users, Trophy, Zap, Code, Database, Brain, Cloud, Shield, Layout, Server, Activity, Bot, Send, User } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import { useAuth } from "@/context/AuthContext";
+import { API_BASE } from "@/lib/api";
 
 const Index = () => {
   const [chatMessages, setChatMessages] = useState<{role: 'ai'|'user', text: string}[]>([
@@ -32,7 +33,7 @@ const Index = () => {
     setIsTyping(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/ai/chat", {
+      const response = await fetch(`${API_BASE}/ai/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
