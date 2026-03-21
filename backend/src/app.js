@@ -25,30 +25,38 @@ const defaultOrigins = [
   'http://localhost:3000'
 ];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl requests, or some preflight)
-      if (!origin) return callback(null, true);
-      
-      const allOrigins = [...new Set([...allowedOrigins, ...defaultOrigins])];
-      
-      if (allOrigins.includes('*')) return callback(null, true);
-      if (allOrigins.includes(origin)) return callback(null, true);
-      
-      // Allow any Vercel domain dynamically
-      if (origin.endsWith('.vercel.app')) return callback(null, true);
-      
-      // If we reach here, it's not allowed
-      return callback(new Error("Not allowed by CORS"));
-    },
-    credentials: true,
-    // Explicitly define methods, preflight relies on OPTIONS
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    // Adding allowedHeaders to ensure requests are supported for login/register
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
-  })
-);
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl requests, or some preflight)
+    if (!origin) return callback(null, true);
+    
+    // Sometimes the origin might include a trailing slash
+    const cleanOrigin = origin.endsWith('/') ? origin.slice(0, -1) : origin;
+    
+    const allOrigins = [...new Set([...allowedOrigins, ...defaultOrigins])];
+    
+    if (allOrigins.includes('*')) return callback(null, true);
+    if (allOrigins.includes(cleanOrigin)) return callback(null, true);
+    
+    // Allow any Vercel domain dynamically
+    if (cleanOrigin.endsWith('.vercel.app')) return callback(null, true);
+    
+    // Instead of Error, simply deny the origin (passing false)
+    return callback(null, false);
+  },
+  credentials: true,
+  // Explicitly define methods, preflight relies on OPTIONS
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  // Adding allowedHeaders to ensure requests are supported for login/register
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  // Handle Legacy 204 behavior
+  optionsSuccessStatus: 200
+};
+
+// Enable pre-flight across-the-board
+app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(logger);
