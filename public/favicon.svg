@@ -5,10 +5,15 @@
       <stop offset="1" stop-color="#6366f1" />
     </linearGradient>
   </defs>
+  <!-- Rounded square background -->
   <rect width="256" height="256" rx="56" fill="url(#primary)" />
-  <g transform="translate(48, 48) scale(6.666)" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M21.42 10.922a2 2 0 0 0-.019-3.838L12.83 4.3a2 2 0 0 0-1.66 0l-8.57 2.78a2 2 0 0 0-.02 3.84l8.53 2.84a2 2 0 0 0 1.66 0z"/>
-    <path d="M22 10v6"/>
-    <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>
+  <!-- Graduation cap icon centered (scaled from 24x24 viewbox to fill ~160x160 at center) -->
+  <g transform="translate(128,128) scale(7) translate(-12,-12)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <!-- graduation cap top -->
+    <path d="M21.42 10.922a2 2 0 0 0-.019-3.838L12.83 4.3a2 2 0 0 0-1.66 0l-8.57 2.78a2 2 0 0 0-.02 3.84l8.53 2.84a2 2 0 0 0 1.66 0z" />
+    <!-- cap string right -->
+    <path d="M22 10v6" />
+    <!-- diploma cylinder -->
+    <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
   </g>
 </svg>

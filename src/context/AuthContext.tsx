@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("token");
     setUser(null);
     setIsAuthenticated(false);
-    window.location.href = "/login";
+    window.location.replace("/");
   };
 
   const updateUser = (data: Partial<User>) => {
