@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { GraduationCap, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
 import { API_BASE } from "@/lib/api";
+import { Logo } from "@/components/ui/Logo";
 
 interface AuthFormProps {
   mode: "login" | "register";
@@ -57,7 +58,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
       }
 
       if (data.accessToken) {
-        login(data.accessToken); // Uses AuthContext instead of direct localStorage
+        login(data.accessToken);
       }
 
       toast.success(isLogin ? "Welcome back!" : "Account created successfully");
@@ -73,12 +74,9 @@ const AuthForm = ({ mode }: AuthFormProps) => {
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2.5 mb-6">
-            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-              <GraduationCap className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-semibold text-foreground">Curricula</span>
-          </Link>
+          <div className="flex justify-center w-full">
+            <Logo className="mb-6" isLarge={true} />
+          </div>
           <h1 className="text-2xl font-bold text-foreground">
             {isLogin ? "Welcome back" : "Create your account"}
           </h1>

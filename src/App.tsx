@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/context/AuthContext";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
+import ScrollToTop from "@/components/shared/ScrollToTop";
+import { AIAssistant } from "@/components/shared/AIAssistant";
 import Index from "./pages/Index.tsx";
 import Courses from "./pages/Courses.tsx";
 import Practice from "./pages/Practice.tsx";
@@ -25,6 +27,7 @@ const App = () => (
       <Sonner />
       <AuthProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/courses" element={<Courses />} />
@@ -42,6 +45,7 @@ const App = () => (
 
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <AIAssistant />
         </BrowserRouter>
       </AuthProvider>
     </TooltipProvider>

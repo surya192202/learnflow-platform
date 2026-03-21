@@ -1,40 +1,36 @@
-const express = require('express');
-const cors = require('cors');
+const https = require('https');
 
-const app = express();
-const origin = 'https://learnflow-eta.vercel.app';
-
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-    if (origin.endsWith('.vercel.app')) return callback(null, true);
-    return callback(null, false);
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
-  optionsSuccessStatus: 200 
-};
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
-
-app.post('/api/auth/register', (req, res) => res.json({ ok: 1 }));
-
-app.listen(3123, async () => {
+async function testOptions() {
     try {
-        const res = await fetch('http://localhost:3123/api/auth/register', {
+        console.log('Sending OPTIONS to live Render app...');
+        const res = await fetch('https://learnflow.onrender.com/api/auth/register', {
             method: 'OPTIONS',
             headers: {
-                'Origin': origin,
+                'Origin': 'https://learnflow-i7w1w1cde-surya192202s-projects.vercel.app',
                 'Access-Control-Request-Method': 'POST',
-                'Access-Control-Request-Headers': 'Content-Type'
+                'Access-Control-Request-Headers': 'Content-Type, Authorization',
+                'Accept': '*/*, application/json'
             }
         });
+        
         console.log('OPTIONS Status:', res.status);
         console.log('OPTIONS Headers:', Object.fromEntries(res.headers.entries()));
+
+        console.log('\nSending GET to live Render health check...');
+        const res2 = await fetch('https://learnflow.onrender.com/api/health', {
+            method: 'GET',
+            headers: {
+                'Origin': 'https://learnflow-i7w1w1cde-surya192202s-projects.vercel.app',
+                'Accept': '*/*, application/json'
+            }
+        });
+        
+        console.log('GET Health Status:', res2.status);
+        console.log('GET Health Headers:', Object.fromEntries(res2.headers.entries()));
+        console.log('Response body:', await res2.text());
+
     } catch(err) {
-        console.error(err);
+        console.error('Fetch error:', err);
     }
-    process.exit(0);
-});
+}
+testOptions();

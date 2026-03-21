@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Search, User, LogIn, LogOut, GraduationCap } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { Logo } from "@/components/ui/Logo";
 
 const Navbar = () => {
   const location = useLocation();
@@ -19,14 +20,7 @@ const Navbar = () => {
     <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-lg border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 shrink-0">
-          <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center">
-            <GraduationCap className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <span className="text-lg font-bold tracking-tight text-foreground hidden sm:block">
-            LearnFlow
-          </span>
-        </Link>
+        <Logo hideTextOnMobile={true} />
 
         {/* Center: Nav Links + Search */}
         <nav className="hidden md:flex items-center gap-1 ml-8">
