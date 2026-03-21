@@ -21,7 +21,6 @@ const allowedOrigins = (process.env.CORS_ORIGIN || "")
   .filter(Boolean);
 
 const defaultOrigins = [
-  'https://learnflow-eta.vercel.app',
   'http://localhost:5173',
   'http://localhost:3000'
 ];
@@ -37,10 +36,16 @@ app.use(
       if (allOrigins.includes('*')) return callback(null, true);
       if (allOrigins.includes(origin)) return callback(null, true);
       
+      // Allow any Vercel domain dynamically
+      if (origin.endsWith('.vercel.app')) return callback(null, true);
+      
+      // If we reach here, it's not allowed
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
+    // Explicitly define methods, preflight relies on OPTIONS
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    // Adding allowedHeaders to ensure requests are supported for login/register
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
   })
 );
