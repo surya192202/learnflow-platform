@@ -20,15 +20,28 @@ const allowedOrigins = (process.env.CORS_ORIGIN || "")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+const defaultOrigins = [
+  'https://learnflow-eta.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
 app.use(
   cors({
     origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl requests, or some preflight)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.length === 0) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
+      
+      const allOrigins = [...new Set([...allowedOrigins, ...defaultOrigins])];
+      
+      if (allOrigins.includes('*')) return callback(null, true);
+      if (allOrigins.includes(origin)) return callback(null, true);
+      
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
   })
 );
 app.use(express.json());
