@@ -40,8 +40,12 @@ const corsOptions = {
     
     // Allow any Vercel domain dynamically
     if (cleanOrigin.endsWith('.vercel.app')) return callback(null, true);
+
+    // Allow any localhost port for local development
+    if (/^http:\/\/localhost(:\d+)?$/.test(cleanOrigin)) return callback(null, true);
+    if (/^http:\/\/127\.0\.0\.1(:\d+)?$/.test(cleanOrigin)) return callback(null, true);
     
-    // Instead of Error, simply deny the origin (passing false)
+    // Deny everything else
     return callback(null, false);
   },
   credentials: true,
